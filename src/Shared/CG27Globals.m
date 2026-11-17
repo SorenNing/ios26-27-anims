@@ -5,7 +5,7 @@
 
 #import "CG27Globals.h"
 #import <UIKit/UIKit.h>
-#import "CG27GenieDriver.h"
+#import "../Core/CG27GenieDriver.h"
 
 static NSHashTable *gDrivers;
 static os_unfair_lock gDriversLock = OS_UNFAIR_LOCK_INIT;

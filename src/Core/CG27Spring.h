@@ -24,12 +24,12 @@ typedef struct CG27MeshFace { unsigned int indices[4]; } CG27MeshFace;
 FOUNDATION_EXPORT void CG27EngineStep(CG27Engine *engine, double dt);
 
 /// 由 engine 计算 9 个输出点（对应 -[CG27GenieDriver engine:xy:]，0x50c4）。
-FOUNDATION_EXPORT void CG27EngineSampleXY(const CG27Engine *engine, double intensity, CG27Grid out);
+FOUNDATION_EXPORT void CG27EngineSampleXY(const CG27Engine *engine, double intensity, CG27Grid _Nonnull out);
 
 /// 由 9 点网格构建 CAMutableMeshTransform（对应 sub_5260，0x5260）。
-FOUNDATION_EXPORT id CG27MeshFromGrid(const CG27Grid grid);
+FOUNDATION_EXPORT id _Nullable CG27MeshFromGrid(const CG27Grid _Nonnull grid);
 
 /// 3×3 网格双线性采样（对应 -[CG27GenieDriver deformAccessoryPoint:]，0x831c）。
-FOUNDATION_EXPORT CGPoint CG27GridSample(const CG27Grid grid, CGPoint p);
+FOUNDATION_EXPORT CGPoint CG27GridSample(const CG27Grid _Nonnull grid, CGPoint p);
 
 NS_ASSUME_NONNULL_END

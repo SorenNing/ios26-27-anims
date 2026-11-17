@@ -119,7 +119,7 @@ id CG27MeshFromGrid(const CG27Grid grid)
     if (!CG27MeshClass) {
         return nil;
     }
-    id mesh = [CG27MeshClass meshTransform];
+    id mesh = ((id (*)(id, SEL))objc_msgSend)(CG27MeshClass, @selector(meshTransform));
     const SEL setSubdivision = NSSelectorFromString(@"setSubdivisionSteps:");
     if ([mesh respondsToSelector:setSubdivision]) {
         ((void (*)(id, SEL, long long))objc_msgSend)(mesh, setSubdivision, -1LL);

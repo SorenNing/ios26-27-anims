@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class UIView;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /// 全体活跃的 CG27GenieDriver（原版 @0x250890 的全局容器，弱引用）。

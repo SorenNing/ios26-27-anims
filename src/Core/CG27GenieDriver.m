@@ -14,6 +14,9 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+// UIKit private symbol; arm64e original consumes s0 immediately after the call.
+extern float UIAnimationDragCoefficient(void);
+
 static NSString *const kCG27GrabberHideReason = @"iOS27AnimsRebornGrabberHide";
 static NSString *const kCG27MeshAnimationKey = @"iOS27AnimsRebornMesh";
 static NSString *const kCG27CornerResetKey = @"cg27.cornerReset";
