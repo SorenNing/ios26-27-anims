@@ -32,6 +32,11 @@ jobs:
           brew install ldid dpkg fakeroot xz
           git clone --depth 1 https://github.com/roothide/theos.git "$RUNNER_TEMP/theos"
           git -C "$RUNNER_TEMP/theos" submodule update --init --recursive
+          # The Makefile targets iPhoneOS 16.5 explicitly; Xcode's latest SDK is not 16.5.
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/theos/sdks.git "$RUNNER_TEMP/theos-sdks"
+          git -C "$RUNNER_TEMP/theos-sdks" sparse-checkout set iPhoneOS16.5.sdk
+          test -f "$RUNNER_TEMP/theos-sdks/iPhoneOS16.5.sdk/SDKSettings.plist"
+          ln -s "$RUNNER_TEMP/theos-sdks/iPhoneOS16.5.sdk" "$RUNNER_TEMP/theos/sdks/iPhoneOS16.5.sdk"
           echo "THEOS=$RUNNER_TEMP/theos" >> "$GITHUB_ENV"
           echo "PATH=$RUNNER_TEMP/theos/bin:$PATH" >> "$GITHUB_ENV"
 
@@ -68,9 +73,9 @@ jobs:
           p=sys.argv[1]
           raw=subprocess.check_output(['dpkg-deb','--fsys-tarfile',p])
           def thin_arch(b):
-              if b[:4] == b'\\xcf\\xfa\\xed\\xfe':
+              if b[:4] == bytes.fromhex('cffaedfe'):
                   return struct.unpack_from('<II', b, 4)
-              if b[:4] == b'\\xfe\\xed\\xfa\\xcf':
+              if b[:4] == bytes.fromhex('feedfacf'):
                   return struct.unpack_from('>II', b, 4)
               return None
           with tarfile.open(fileobj=io.BytesIO(raw),mode='r:*') as t:
@@ -83,7 +88,7 @@ jobs:
                       cputype, subtype = arch
                       assert cputype == 0x100000c and subtype == 0x80000002, (m.name,hex(cputype),hex(subtype))
                       bins.append(m.name)
-                  elif b[:4] in (b'\\xca\\xfe\\xba\\xbe', b'\\xbe\\xba\\xfe\\xca'):
+                  elif b[:4] in (bytes.fromhex('cafebabe'), bytes.fromhex('bebafeca')):
                       raise AssertionError('fat Mach-O is not allowed in the 64e package: '+m.name)
               assert len(bins) == 2, bins
           print('verified thin arm64e binaries:', bins)
